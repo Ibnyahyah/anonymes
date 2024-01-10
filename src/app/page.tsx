@@ -27,7 +27,7 @@ export default function Home() {
       <div className="py-10 flex items-center justify-center md:h-[80vh]">
         <div className="text-center flex flex-col justify-center">
           <h1 className="md:text-3xl md:font-regular">Welcome to Anonymous</h1>
-          <p className="my-6 text-3xl md:text-7xl md:font-medium px-10">
+          <p className="my-6 text-3xl md:text-7xl font-medium md:px-10">
             Your web3 base Anonymous message application. It is secure,
             transparent and fast.
           </p>
