@@ -68,7 +68,7 @@ function Comment({ params }: { params: { id: string } }) {
           content="Anony Mes your web3 anonymous comment space. Make fun and tell your friend what you think about them"
         />
       </Head>
-      <div className="container mx-auto px-24">
+      <div className="container mx-auto px-4 md:px-24">
         <Navbar />
         <div>
           <div className="flex items-center justify-between mb-10">
