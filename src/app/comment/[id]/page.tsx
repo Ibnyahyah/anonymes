@@ -43,7 +43,12 @@ function GetComment({ params }: { params: { id: string } }) {
         </div>
         <CustomButton
           onClick={() => {
-            const url = `${window.location.host}/comment/create/${params.id}?owner=${message?.owner}`;
+            const url = `${window.location.host}/comment/add/${
+              params.id
+            }?owner=${message?.owner}&title=${message?.title.replaceAll(
+              " ",
+              "-"
+            )}`;
             window.navigator.clipboard
               .writeText(url)
               .then((_) => alert("Link Copied"));
@@ -53,16 +58,23 @@ function GetComment({ params }: { params: { id: string } }) {
         </CustomButton>
         <div className="my-10">
           <h1>Comments</h1>
-          <div className="grid md:grid-cols-3 gap-5 mt-5">
-            {message?.comments.slice(0, 6).map((e, i) => (
-              <div key={i} className="bg-white rounded-[15px] p-10 text-black">
-                <div className="bg-black text-white font-[600] text-2xl w-[60px] h-[60px] flex items-center justify-center rounded-full mb-4">
-                  0{i + 1}
+          {message?.comments?.length <= 0 ? (
+            <p className="text-center my-10">No Comment yet</p>
+          ) : (
+            <div className="grid md:grid-cols-3 gap-5 mt-5">
+              {message?.comments.slice(0, 6).map((e, i) => (
+                <div
+                  key={i}
+                  className="bg-white rounded-[15px] p-10 text-black"
+                >
+                  <div className="bg-black text-white font-[600] text-2xl w-[60px] h-[60px] flex items-center justify-center rounded-full mb-4">
+                    0{i + 1}
+                  </div>
+                  <p>{e.length > 200 ? `${e.substring(0, 200)}...` : e}</p>
                 </div>
-                <p>{e.length > 200 ? `${e.substring(0, 200)}...` : e}</p>
-              </div>
-            ))}
-          </div>
+              ))}
+            </div>
+          )}
         </div>
       </div>
     </div>

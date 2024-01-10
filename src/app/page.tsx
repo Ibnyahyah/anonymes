@@ -13,30 +13,34 @@ export default function Home() {
   const { isConnected } = useWeb3ModalAccount();
 
   const navigateToDashboard = useCallback(() => {
-    router.push("/create");
-  }, [router]);
+    if (isConnected) {
+      router.push("/create");
+    }
+  }, [router, isConnected]);
 
   useEffect(() => {
-    if (isConnected) {
-      navigateToDashboard();
-    }
-  }, [navigateToDashboard, isConnected]);
+    // navigateToDashboard();
+  }, [navigateToDashboard]);
   return (
-    <main className="min-h-screen container mx-auto px-24">
+    <main className="min-h-screen container mx-auto px-4 md:px-24">
       <Navbar />
-      <div className="grid grid-cols-2 gap-10 min-h-[80dvh] items-center py-10">
-        <div className="">
-          <h1 className="md:text-5xl md:font-bold">Welcome to ANONYm</h1>
-          <p className="my-6">
-            Lorem ipsum dolor sit amet consectetur adipisicing elit. Odio
-            adipisci modi, doloremque perferendis praesentium dolore facere
-            impedit eius repellendus possimus.
+      <div className="py-10 flex items-center justify-center md:h-[80vh]">
+        <div className="text-center flex flex-col justify-center">
+          <h1 className="md:text-3xl md:font-regular">Welcome to Anonymous</h1>
+          <p className="my-6 text-7xl md:font-medium px-10">
+            Your web3 base Anonymous message application. It is secure,
+            transparent and fast.
           </p>
-          <CustomButton onClick={navigateToDashboard}>
-            Create Your AnonyM
-          </CustomButton>
+          <p className="mb-10">
+            It is also a very simple software for everybody to make use of.
+          </p>
+          <div className="flex gap-x-10 items-center justify-center">
+            <CustomButton onClick={navigateToDashboard}>
+              Get Started
+            </CustomButton>
+            <CustomButton>Learn more</CustomButton>
+          </div>
         </div>
-        <div className="md:h-1/2 bg-white rounded-md w-full"></div>
       </div>
     </main>
   );
