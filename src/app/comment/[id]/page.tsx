@@ -61,7 +61,7 @@ function GetComment({ params }: { params: { id: string } }) {
           </CustomButton>
           <div className="my-10">
             <h1>Comments</h1>
-            {message?.comments?.length <= 0 ? (
+            {(message?.comments ?? []).length <= 0 ? (
               <p className="text-center my-10">No Comment yet</p>
             ) : (
               <div className="grid md:grid-cols-3 gap-5 mt-5">
