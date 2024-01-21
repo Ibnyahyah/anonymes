@@ -7,7 +7,10 @@ import Loader from "@/assets/gifs/loading.gif";
 type propsType = {
   children: React.ReactNode;
   onClick?: () => void;
-  loading?: boolean | false;
+  loading?: boolean;
+  isOutlined?: boolean;
+  title?: string;
+  moreStyle?: string;
 };
 
 function CustomButton(props: propsType) {
@@ -15,11 +18,16 @@ function CustomButton(props: propsType) {
   const { isConnected } = useWeb3ModalAccount();
   return (
     <button
-      className=""
+      className={`p-4 py-2 ${
+        props.moreStyle ?? "bg-white-100"
+      } rounded-md text-[12px] md:text-[100%] ${
+        props.isOutlined ? "border border-black" : ""
+      }`}
       disabled={props.loading}
       onClick={
         props.loading ? () => {} : isConnected ? props.onClick : () => open()
       }
+      title={props.title}
     >
       {props.loading ? (
         <Image

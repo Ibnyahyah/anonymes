@@ -23,7 +23,7 @@ export default function Home() {
   }, [navigateToDashboard]);
   return (
     <main className="min-h-screen container mx-auto px-4 md:px-24">
-      <Navbar />
+      <Navbar showLogo={true} />
       <div className="py-10 flex items-center justify-center md:h-[80vh]">
         <div className="text-center flex flex-col justify-center">
           <h1 className="md:text-3xl md:font-regular">Welcome to Anonymous</h1>

@@ -1,4 +1,41 @@
-import { useWeb3ModalAccount } from "@web3modal/ethers/react";
+import { ErrorType } from "./types/error";
+declare let window: any;
+async function switchToSepolia() {
+  if (window!.ethereum) {
+    try {
+      // Request user to switch to Sepolia
+      await window.ethereum!.request({
+        method: "wallet_switchEthereumChain",
+        params: [{ chainId: "0xaa36a7" }], // Chain ID for Sepolia in hexadecimal
+      });
+    } catch (switchError) {
+      if ((switchError as ErrorType).code === 4902) {
+        try {
+          // If Sepolia is not added to user's MetaMask, add it
+          await window!.ethereum?.request({
+            method: "wallet_addEthereumChain",
+            params: [
+              {
+                chainId: "0xaa36a7",
+                chainName: "Sepolia",
+                nativeCurrency: {
+                  name: "ETH",
+                  symbol: "ETH",
+                  decimals: 18,
+                },
+                rpcUrls: ["https://rpc.sepolia.org"],
+              },
+            ],
+          });
+        } catch (addError) {
+          console.error("Failed to add Sepolia network to MetaMask", addError);
+        }
+      } else {
+        console.error("Failed to switch to Sepolia network", switchError);
+      }
+    }
+  }
+}
 
 export const checkIfChainIdIsCorrectThenContinue = ({
   cFn,
@@ -14,9 +51,9 @@ export const checkIfChainIdIsCorrectThenContinue = ({
     if (chainId === 11155111) {
       setTimeout(cFn, 100);
     } else {
-      throw Error("You are required to use Sepolia. Kindly switch to Sepolia?");
+      switchToSepolia();
     }
   } catch (e) {
-    alert(e);
+    console.log(e);
   }
 };

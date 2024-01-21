@@ -10,7 +10,11 @@ const config: Config = {
     colors: {
       green: "green",
       white: "white",
+      "white-100": "rgba(255,255,255,0.2)",
       black: "black",
+    },
+    borderColor: {
+      "white-100": "rgba(255,255,255,0.2)",
     },
     extend: {
       backgroundImage: {
