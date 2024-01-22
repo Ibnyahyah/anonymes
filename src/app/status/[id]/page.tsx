@@ -122,7 +122,7 @@ function GetComment({ params }: { params: { id: string } }) {
             </CustomButton>
             <CustomButton
               onClick={() => {
-                const url = `${window.location.host}/status/${params.id}}`;
+                const url = `${window.location.host}/status/${params.id}`;
                 window.navigator.clipboard
                   .writeText(url)
                   .then((_) => alert("Link Copied"));
