@@ -2,6 +2,42 @@ export const ANONY_MES_Abi = [
   {
     inputs: [
       {
+        internalType: "address[]",
+        name: "users",
+        type: "address[]",
+      },
+      {
+        internalType: "uint256",
+        name: "id",
+        type: "uint256",
+      },
+    ],
+    name: "addAuthorizedUsers",
+    outputs: [],
+    stateMutability: "nonpayable",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
+        internalType: "string",
+        name: "comment",
+        type: "string",
+      },
+      {
+        internalType: "uint256",
+        name: "id",
+        type: "uint256",
+      },
+    ],
+    name: "addCommentToMessage",
+    outputs: [],
+    stateMutability: "nonpayable",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
         internalType: "address",
         name: "_profileCOntractAddress",
         type: "address",
@@ -129,6 +165,24 @@ export const ANONY_MES_Abi = [
     type: "event",
   },
   {
+    inputs: [
+      {
+        internalType: "string",
+        name: "title",
+        type: "string",
+      },
+      {
+        internalType: "bool",
+        name: "isPublic",
+        type: "bool",
+      },
+    ],
+    name: "createMessage",
+    outputs: [],
+    stateMutability: "nonpayable",
+    type: "function",
+  },
+  {
     anonymous: false,
     inputs: [
       {
@@ -150,17 +204,12 @@ export const ANONY_MES_Abi = [
   {
     inputs: [
       {
-        internalType: "address[]",
-        name: "users",
-        type: "address[]",
-      },
-      {
         internalType: "uint256",
         name: "id",
         type: "uint256",
       },
     ],
-    name: "addAuthorizedUsers",
+    name: "deleteMessage",
     outputs: [],
     stateMutability: "nonpayable",
     type: "function",
@@ -168,17 +217,12 @@ export const ANONY_MES_Abi = [
   {
     inputs: [
       {
-        internalType: "string",
-        name: "comment",
-        type: "string",
-      },
-      {
-        internalType: "uint256",
-        name: "id",
-        type: "uint256",
+        internalType: "address",
+        name: "newOwner",
+        type: "address",
       },
     ],
-    name: "addCommentToMessage",
+    name: "transferOwnership",
     outputs: [],
     stateMutability: "nonpayable",
     type: "function",
@@ -205,37 +249,6 @@ export const ANONY_MES_Abi = [
       },
     ],
     stateMutability: "pure",
-    type: "function",
-  },
-  {
-    inputs: [
-      {
-        internalType: "string",
-        name: "title",
-        type: "string",
-      },
-      {
-        internalType: "bool",
-        name: "isPublic",
-        type: "bool",
-      },
-    ],
-    name: "createMessage",
-    outputs: [],
-    stateMutability: "nonpayable",
-    type: "function",
-  },
-  {
-    inputs: [
-      {
-        internalType: "uint256",
-        name: "id",
-        type: "uint256",
-      },
-    ],
-    name: "deleteMessage",
-    outputs: [],
-    stateMutability: "nonpayable",
     type: "function",
   },
   {
@@ -370,6 +383,56 @@ export const ANONY_MES_Abi = [
   },
   {
     inputs: [],
+    name: "getPublicMessages",
+    outputs: [
+      {
+        components: [
+          {
+            internalType: "uint256",
+            name: "id",
+            type: "uint256",
+          },
+          {
+            internalType: "string",
+            name: "title",
+            type: "string",
+          },
+          {
+            internalType: "string[]",
+            name: "comments",
+            type: "string[]",
+          },
+          {
+            internalType: "address",
+            name: "owner",
+            type: "address",
+          },
+          {
+            internalType: "bool",
+            name: "isPublic",
+            type: "bool",
+          },
+          {
+            internalType: "address[]",
+            name: "authorizedUsers",
+            type: "address[]",
+          },
+          {
+            internalType: "uint256",
+            name: "timestamp",
+            type: "uint256",
+          },
+        ],
+        internalType: "struct AnnoymousMessenger.Message[]",
+        name: "",
+        type: "tuple[]",
+      },
+    ],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [],
     name: "getRewardBalance",
     outputs: [
       {
@@ -378,7 +441,7 @@ export const ANONY_MES_Abi = [
         type: "uint256",
       },
     ],
-    stateMutability: "nonpayable",
+    stateMutability: "view",
     type: "function",
   },
   {
@@ -398,19 +461,6 @@ export const ANONY_MES_Abi = [
       },
     ],
     stateMutability: "pure",
-    type: "function",
-  },
-  {
-    inputs: [
-      {
-        internalType: "address",
-        name: "newOwner",
-        type: "address",
-      },
-    ],
-    name: "transferOwnership",
-    outputs: [],
-    stateMutability: "nonpayable",
     type: "function",
   },
 ];

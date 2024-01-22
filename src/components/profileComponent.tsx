@@ -17,7 +17,7 @@ function ProfileComponent() {
     owner: "",
     username: "",
     fullname: "",
-    bio: "",
+    bio: "I am ...",
   });
   const [loading, setLoading] = React.useState(false);
   const [active, setActive] = React.useState(true);
@@ -45,8 +45,7 @@ function ProfileComponent() {
             formData.bio
           );
           console.log(response);
-          alert("Profile created");
-          window.location.reload();
+          alert("Profile created, reload the page.");
         } catch (e) {
           alert((e as ErrorType).message);
         } finally {

@@ -1,5 +1,6 @@
 import { ErrorType } from "./types/error";
 declare let window: any;
+
 async function switchToSepolia() {
   if (window!.ethereum) {
     try {

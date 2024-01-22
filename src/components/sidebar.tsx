@@ -1,18 +1,23 @@
 import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import React from "react";
 import CustomButton from "./customButton";
 import { GlobalAppContext } from "@/context/globalContext";
+import CustomLink from "./customLink";
+import { useWeb3Modal } from "@web3modal/ethers/react";
 
 function Sidebar() {
+  const router = useRouter();
   const { toggleSideBar, sideBarOpen } = React.useContext(GlobalAppContext);
   const pathname = usePathname();
+
+  const { close } = useWeb3Modal();
 
   return (
     <div
       className={`${
-        sideBarOpen ? "flex absolute" : "hidden"
-      } md:flex bg-black md:static w-screen md:w-[25%] h-screen  p-4 md:p-10 flex-col justify-between items-start`}
+        sideBarOpen ? "flex absolute md:sticky" : "hidden top-0 sticky"
+      } md:flex bg-black md:static w-[60%] md:w-[25%] h-screen  p-4 md:p-10 flex-col justify-between items-start`}
     >
       <div>
         <header>
@@ -47,18 +52,27 @@ function Sidebar() {
               route: "/faqs",
             },
           ].map((l, i) => (
-            <li
-              key={i}
-              className={` p-4 py-2 w-full ${
-                pathname.includes(l.route) ? "bg-white-100" : ""
-              } rounded-md cursor-pointer hover:bg-white-100`}
-            >
-              {l.title}
-            </li>
+            <CustomLink key={i} route={l.route}>
+              <li
+                key={i}
+                className={` p-4 py-2 w-full ${
+                  pathname.includes(l.route) ? "bg-white-100" : ""
+                } rounded-md cursor-pointer hover:bg-white-100`}
+              >
+                {l.title}
+              </li>
+            </CustomLink>
           ))}
         </ul>
       </div>
-      <CustomButton>Logout</CustomButton>
+      <CustomButton
+        onClick={() => {
+          close();
+          router.replace("/");
+        }}
+      >
+        Logout
+      </CustomButton>
     </div>
   );
 }

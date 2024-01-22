@@ -15,13 +15,14 @@ export const GlobalAppContext = createContext();
 
 export const GlobalAppContextProvider = ({ children }) => {
   const [messages, setMessages] = useState([]);
+  const [userMessages, setUserMessages] = useState([]);
   const [sideBarOpen, setSideBarOpen] = useState(false);
   const [user, setUser] = React.useState();
   const [message, setMessage] = useState();
+  const [balance, setBalance] = useState("0");
 
   const { address, chainId, isConnected } = useWeb3ModalAccount();
   const { walletProvider } = useWeb3ModalProvider();
-  const { open } = useWeb3Modal();
 
   const getMessages = useCallback(
     () =>
@@ -34,24 +35,58 @@ export const GlobalAppContextProvider = ({ children }) => {
             ANONY_MES_Abi,
             signer
           );
-          const response = await AnnoyContract.getMessages();
-          console.log(response);
+          const response = await AnnoyContract.getPublicMessages();
           const responseArr = [];
           for (let i = 0; i < response.length; i++) {
             const element = response[i];
-            console.log(element.comments);
             responseArr.push(element);
           }
-          setMessages(responseArr);
+          setMessages(
+            responseArr
+              .filter((el) => el.isPublic)
+              .sort((a, b) => Number(b.timestamp) - Number(a.timestamp))
+          );
         },
         chainId,
         isConnected,
       }),
     [isConnected, chainId, walletProvider]
   );
+
+  const getUserMessages = useCallback(
+    () =>
+      checkIfChainIdIsCorrectThenContinue({
+        cFn: async () => {
+          const ethersProvider = new BrowserProvider(walletProvider);
+          const signer = await ethersProvider.getSigner();
+          const AnnoyContract = new Contract(
+            ANONYAddress,
+            ANONY_MES_Abi,
+            signer
+          );
+          const response = await AnnoyContract.getMessages();
+          const responseArr = [];
+          for (let i = 0; i < response.length; i++) {
+            const element = response[i];
+            // console.log(element.id);
+            responseArr.push(element);
+          }
+          setUserMessages(
+            responseArr.sort(
+              (a, b) => Number(b.timestamp) - Number(a.timestamp)
+            )
+          );
+        },
+        chainId,
+        isConnected,
+      }),
+    [isConnected, chainId, walletProvider]
+  );
+
   const getMessage = (id) =>
     checkIfChainIdIsCorrectThenContinue({
       cFn: async () => {
+        setMessage(null);
         try {
           const ethersProvider = new BrowserProvider(walletProvider);
           const signer = await ethersProvider.getSigner();
@@ -96,12 +131,37 @@ export const GlobalAppContextProvider = ({ children }) => {
       }),
     [chainId, address, walletProvider, isConnected]
   );
+  const getRewardBalance = React.useCallback(
+    () =>
+      checkIfChainIdIsCorrectThenContinue({
+        cFn: async () => {
+          try {
+            const ethersProvider = new BrowserProvider(walletProvider);
+            const signer = await ethersProvider.getSigner();
+            const AnnoyContract = new Contract(
+              ANONYAddress,
+              ANONY_MES_Abi,
+              signer
+            );
+            const response = await AnnoyContract.getRewardBalance();
+            setBalance(BigInt(response).toString());
+          } catch (e) {
+            console.log(e.message);
+            throw e.message;
+          }
+        },
+        chainId,
+        isConnected,
+      }),
+    [chainId, walletProvider, isConnected]
+  );
 
   useEffect(() => {
     if (isConnected) {
       getMessages();
+      getUserMessages();
     }
-  }, [getMessages, isConnected]);
+  }, [getMessages, isConnected, getUserMessages]);
 
   function toggleSideBar() {
     setSideBarOpen((prev) => !prev);
@@ -109,13 +169,18 @@ export const GlobalAppContextProvider = ({ children }) => {
 
   const data = {
     messages,
+    userMessages,
     getMessages,
+    getUserMessages,
     toggleSideBar,
     sideBarOpen,
+    setSideBarOpen,
     getMessage,
     getProfile,
+    getRewardBalance,
     user,
     message,
+    balance,
   };
   return (
     <GlobalAppContext.Provider value={data}>

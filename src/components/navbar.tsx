@@ -17,16 +17,24 @@ function Navbar({ showLogo = false }: propsTypes) {
 
   const {
     getProfile,
+    getRewardBalance,
     toggleSideBar,
     user,
-  }: { getProfile: () => void; toggleSideBar: () => void; user: userType } =
-    React.useContext(GlobalAppContext);
+    balance,
+  }: {
+    getProfile: () => void;
+    getRewardBalance: () => void;
+    toggleSideBar: () => void;
+    user: userType;
+    balance: number;
+  } = React.useContext(GlobalAppContext);
 
   React.useEffect(() => {
     getProfile();
-  }, [getProfile]);
+    getRewardBalance();
+  }, [getProfile, getRewardBalance]);
   return (
-    <nav className="flex justify-between position-sticky py-10 items-center">
+    <nav className="flex justify-between bg-black sticky top-0 py-10 items-center">
       {showLogo ? (
         <Link href="/" className="text-2xl font-[800] text-green">
           ANONY<span className="font-[300] text-[16px] text-white">m</span>
@@ -40,7 +48,7 @@ function Navbar({ showLogo = false }: propsTypes) {
               </div>
               <div>
                 <p>Hello {user?.username ?? "there, you have"}</p>
-                <p>$AMes: 1999.5</p>
+                <p>$AMes: {balance}</p>
               </div>
             </div>
           ) : (

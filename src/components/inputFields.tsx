@@ -8,6 +8,7 @@ type propsTypes = {
   label?: string;
   name?: string;
   minTextField?: boolean;
+  required?: boolean;
 };
 
 function TextFields(props: propsTypes) {
@@ -20,10 +21,11 @@ function TextFields(props: propsTypes) {
         className={`w-full h-[120px] font-[400] outline-0 resize-none  bg-[transparent] placeholder:text-white-100 ${
           props.minTextField
             ? "text-black text-1xl border p-1"
-            : "text-white text-2xl border-0"
+            : "text-white  border-0"
         }`}
         onChange={props.onChange}
         value={props.value}
+        required={props.required}
       />
     </label>
   );
@@ -40,10 +42,10 @@ export function InputField(props: propsTypes) {
         name={props.name}
         placeholder={props.placeholder}
         className="h-[40px] w-full  border text-black mt-1 outline-0 p-1"
-        required
         value={props.value}
         onChange={props.onChangeInput}
         id={props.label}
+        required={props.required}
       />
     </label>
   );

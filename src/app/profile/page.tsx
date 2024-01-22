@@ -9,27 +9,26 @@ import SingleMessage from "@/components/singleMessage";
 
 function CreateAnonyM() {
   const {
-    messages,
+    userMessages,
   }: {
-    messages: msgType[];
+    userMessages: msgType[];
   } = React.useContext(GlobalAppContext);
-
   const [openCreateProfile, setOpenCreateProfile] = React.useState(false);
 
   return (
     <LayoutTemplate
-      title="Create Your Anonymes"
+      title="Your Anonymes Profile"
       openCreateProfile={openCreateProfile}
     >
       <CreateMessageForm setOpenCreateProfile={setOpenCreateProfile} />
       <div className="my-10">
-        <h1>Messages</h1>
-        {messages.length <= 0 ? (
+        <h1>My Messages</h1>
+        {userMessages.length <= 0 ? (
           <p className="text-center my-10">No messages</p>
         ) : (
           <div className="grid gap-5 mt-5">
-            {messages.map((e, i) => (
-              <SingleMessage msg={e} key={i} i={i} />
+            {userMessages.map((e, i) => (
+              <SingleMessage msg={e} key={i} />
             ))}
           </div>
         )}

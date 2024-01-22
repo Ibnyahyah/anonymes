@@ -1,12 +1,13 @@
 "use client";
 
-import { msgType } from "@/app/create/page";
 import CustomButton from "@/components/customButton";
 import CustomLink from "@/components/customLink";
 import TextFields from "@/components/inputFields";
+import LoadingIndicator from "@/components/loadingIndicator";
 import Navbar from "@/components/navbar";
 import { ANONYAddress } from "@/constants";
 import { ANONY_MES_Abi } from "@/constants/anonyAbi";
+import { msgType } from "@/utils/types/messageType";
 import { GlobalAppContext } from "@/context/globalContext";
 import LayoutTemplate from "@/layout";
 import { checkIfChainIdIsCorrectThenContinue } from "@/utils/function";
@@ -18,7 +19,7 @@ import {
 import { BrowserProvider } from "ethers";
 import { Contract } from "ethers";
 import { useRouter } from "next/navigation";
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 
 function GetComment({ params }: { params: { id: string } }) {
   const route = useRouter();
@@ -30,16 +31,27 @@ function GetComment({ params }: { params: { id: string } }) {
 
   const [comment, setComment] = useState("");
   const [loading, setLoading] = useState(false);
+  const [loadingData, setLoadingData] = useState(true);
   const [writeComment, setWriteComment] = useState(false);
 
   const { isConnected, chainId } = useWeb3ModalAccount();
   const { walletProvider } = useWeb3ModalProvider();
 
+  const _getMessage = useCallback(async () => {
+    try {
+      setLoadingData(true);
+      await getMessage(params.id);
+    } catch (e) {
+    } finally {
+      setLoadingData(false);
+    }
+  }, [params.id, getMessage]);
+
   useEffect(() => {
     if (isConnected) {
-      getMessage(params.id);
+      _getMessage();
     }
-  }, [params.id, isConnected, getMessage]);
+  }, [isConnected]);
 
   function writeCommentHandler(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
@@ -59,9 +71,14 @@ function GetComment({ params }: { params: { id: string } }) {
             comment,
             Number(params.id)
           );
-          console.log(response);
-          setComment("");
-          alert("Comment sent");
+          const receipt = await response.wait(2);
+          console.log(receipt);
+          if (receipt.status === 1) {
+            _getMessage();
+            setComment("");
+            alert("Comment sent");
+            setWriteComment(false);
+          }
         } catch (e) {
           alert(e);
         } finally {
@@ -72,6 +89,7 @@ function GetComment({ params }: { params: { id: string } }) {
       isConnected,
     });
   }
+  if (loadingData && message == undefined) return <LoadingIndicator />;
   return (
     <LayoutTemplate title={message?.title ?? ""}>
       {message == undefined ? (
@@ -83,8 +101,14 @@ function GetComment({ params }: { params: { id: string } }) {
         </div>
       ) : (
         <div>
-          <div className="flex items-center justify-between mb-10 flex-wrap md:flex-nowrap">
-            <h1 className="text-2xl md:text-5xl text-white">
+          <p
+            onClick={() => route.back()}
+            className="text-white-100 cursor-pointer"
+          >
+            Back
+          </p>
+          <div className="flex items-center justify-between mb-10 flex-wrap md:flex-nowrap mt-2">
+            <h1 className="text-2xl md:text-4xl text-white">
               {message?.title}
             </h1>
           </div>
@@ -98,7 +122,7 @@ function GetComment({ params }: { params: { id: string } }) {
             </CustomButton>
             <CustomButton
               onClick={() => {
-                const url = `${window.location.host}/comment/${params.id}}`;
+                const url = `${window.location.host}/status/${params.id}}`;
                 window.navigator.clipboard
                   .writeText(url)
                   .then((_) => alert("Link Copied"));
