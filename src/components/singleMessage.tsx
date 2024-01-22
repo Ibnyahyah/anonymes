@@ -2,7 +2,7 @@ import React from "react";
 import CustomLink from "./customLink";
 import { msgType } from "@/utils/types/messageType";
 
-function SingleMessage({ msg, i }: { msg: msgType; i: number }) {
+function SingleMessage({ msg }: { msg: msgType }) {
   return (
     <div className="border border-white-100 rounded-[5px] p-2 text-white">
       <div className="flex gap-3">

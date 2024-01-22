@@ -29,7 +29,7 @@ function CreateAnonyM() {
         ) : (
           <div className="grid gap-5 mt-5">
             {messages.map((e, i) => (
-              <SingleMessage msg={e} key={i} i={i} />
+              <SingleMessage msg={e} key={i} />
             ))}
           </div>
         )}
