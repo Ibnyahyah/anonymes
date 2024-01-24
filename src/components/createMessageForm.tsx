@@ -1,7 +1,10 @@
 import React from "react";
 import TextFields from "./inputFields";
 import CustomButton from "./customButton";
-import { checkIfChainIdIsCorrectThenContinue } from "@/utils/function";
+import {
+  ErrorHandler,
+  checkIfChainIdIsCorrectThenContinue,
+} from "@/utils/function";
 import { BrowserProvider } from "ethers";
 import { Contract } from "ethers";
 import { ANONYAddress } from "@/constants";
@@ -52,7 +55,6 @@ function CreateMessageForm(props: propsType) {
           );
           if (message.trim() == "") throw Error("Message is required");
           const response = await AnnoyContract.createMessage(message, isPublic);
-          console.log(response);
           const receipt = await response.wait(2);
           console.log(receipt);
           if (receipt.status === 1) {
@@ -67,9 +69,9 @@ function CreateMessageForm(props: propsType) {
           if (err.message?.includes("User does not exist with this address")) {
             props.setOpenCreateProfile(true);
           } else {
-            alert(err.message);
+            ErrorHandler(err);
           }
-          console.log(err.code);
+          console.log(err);
         } finally {
           setLoading(false);
         }

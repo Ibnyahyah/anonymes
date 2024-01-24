@@ -6,6 +6,7 @@ import CustomButton from "./customButton";
 import Link from "next/link";
 import { GlobalAppContext } from "@/context/globalContext";
 import { userType } from "@/utils/types/user";
+import Image from "next/image";
 
 type propsTypes = {
   showLogo?: boolean | true;
@@ -43,12 +44,16 @@ function Navbar({ showLogo = false }: propsTypes) {
         <>
           {isConnected ? (
             <div className="flex gap-x-2" onClick={toggleSideBar}>
-              <div className="bg-white-100 w-[60px] h-[60px] rounded-md flex items-center justify-center">
-                {address?.slice(0, 4)}
+              <div className="w-[60px] h-[60px] rounded-md flex items-center justify-center">
+                <img
+                  loading="lazy"
+                  src="https://api.dicebear.com/7.x/shapes/svg?radius=10&size=60"
+                  alt={`${address} avatar`}
+                />
               </div>
               <div>
                 <p>Hello {user?.username ?? "there, you have"}</p>
-                <p>$AMes: {balance}</p>
+                <p>AMEs: {balance}</p>
               </div>
             </div>
           ) : (
@@ -63,7 +68,7 @@ function Navbar({ showLogo = false }: propsTypes) {
           </CustomButton>
         ) : (
           <CustomButton onClick={() => {}} title="Mint $Ames token">
-            {isConnected ? "Mint" : "Connect Wallet"}
+            {isConnected ? "????" : "Connect Wallet"}
           </CustomButton>
         )}
       </div>

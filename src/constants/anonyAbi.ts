@@ -21,7 +21,7 @@ export const ANONY_MES_Abi = [
     inputs: [
       {
         internalType: "string",
-        name: "comment",
+        name: "content",
         type: "string",
       },
       {
@@ -39,7 +39,12 @@ export const ANONY_MES_Abi = [
     inputs: [
       {
         internalType: "address",
-        name: "_profileCOntractAddress",
+        name: "_profileContractAddress",
+        type: "address",
+      },
+      {
+        internalType: "address",
+        name: "_amesContractAddress",
         type: "address",
       },
     ],
@@ -99,9 +104,9 @@ export const ANONY_MES_Abi = [
             type: "string",
           },
           {
-            internalType: "string[]",
-            name: "comments",
-            type: "string[]",
+            internalType: "uint256[]",
+            name: "commentIDs",
+            type: "uint256[]",
           },
           {
             internalType: "address",
@@ -258,18 +263,35 @@ export const ANONY_MES_Abi = [
         name: "id",
         type: "uint256",
       },
-      {
-        internalType: "address",
-        name: "owner",
-        type: "address",
-      },
     ],
     name: "getComments",
     outputs: [
       {
-        internalType: "string[]",
+        components: [
+          {
+            internalType: "uint256",
+            name: "msgID",
+            type: "uint256",
+          },
+          {
+            internalType: "address",
+            name: "owner",
+            type: "address",
+          },
+          {
+            internalType: "string",
+            name: "content",
+            type: "string",
+          },
+          {
+            internalType: "uint256",
+            name: "timestamp",
+            type: "uint256",
+          },
+        ],
+        internalType: "struct AnnoymousMessenger.Comment[]",
         name: "",
-        type: "string[]",
+        type: "tuple[]",
       },
     ],
     stateMutability: "view",
@@ -298,9 +320,9 @@ export const ANONY_MES_Abi = [
             type: "string",
           },
           {
-            internalType: "string[]",
-            name: "comments",
-            type: "string[]",
+            internalType: "uint256[]",
+            name: "commentIDs",
+            type: "uint256[]",
           },
           {
             internalType: "address",
@@ -348,9 +370,9 @@ export const ANONY_MES_Abi = [
             type: "string",
           },
           {
-            internalType: "string[]",
-            name: "comments",
-            type: "string[]",
+            internalType: "uint256[]",
+            name: "commentIDs",
+            type: "uint256[]",
           },
           {
             internalType: "address",
@@ -398,9 +420,9 @@ export const ANONY_MES_Abi = [
             type: "string",
           },
           {
-            internalType: "string[]",
-            name: "comments",
-            type: "string[]",
+            internalType: "uint256[]",
+            name: "commentIDs",
+            type: "uint256[]",
           },
           {
             internalType: "address",

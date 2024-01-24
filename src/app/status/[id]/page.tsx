@@ -7,11 +7,10 @@ import LoadingIndicator from "@/components/loadingIndicator";
 import Navbar from "@/components/navbar";
 import { ANONYAddress } from "@/constants";
 import { ANONY_MES_Abi } from "@/constants/anonyAbi";
-import { msgType } from "@/utils/types/messageType";
+import { commentType, msgType } from "@/utils/types/messageType";
 import { GlobalAppContext } from "@/context/globalContext";
 import LayoutTemplate from "@/layout";
 import { checkIfChainIdIsCorrectThenContinue } from "@/utils/function";
-import { ErrorType } from "@/utils/types/error";
 import {
   useWeb3ModalAccount,
   useWeb3ModalProvider,
@@ -20,14 +19,21 @@ import { BrowserProvider } from "ethers";
 import { Contract } from "ethers";
 import { useRouter } from "next/navigation";
 import React, { useCallback, useEffect, useState } from "react";
+import SingleComment from "@/components/singleComment";
 
 function GetComment({ params }: { params: { id: string } }) {
   const route = useRouter();
   const {
     getMessage,
+    getComments,
     message,
-  }: { getMessage: (id: string) => void; message: msgType } =
-    React.useContext(GlobalAppContext);
+    comments,
+  }: {
+    getMessage: (id: string) => void;
+    getComments: (id: string) => void;
+    message: msgType;
+    comments: commentType[];
+  } = React.useContext(GlobalAppContext);
 
   const [comment, setComment] = useState("");
   const [loading, setLoading] = useState(false);
@@ -41,11 +47,12 @@ function GetComment({ params }: { params: { id: string } }) {
     try {
       setLoadingData(true);
       await getMessage(params.id);
+      await getComments(params.id);
     } catch (e) {
     } finally {
       setLoadingData(false);
     }
-  }, [params.id, getMessage]);
+  }, [params.id, getMessage, getComments]);
 
   useEffect(() => {
     if (isConnected) {
@@ -134,7 +141,7 @@ function GetComment({ params }: { params: { id: string } }) {
           <div className="my-10 border border-white-100 p-4">
             <div className="flex gap-x-4">
               <h1>Comments</h1>
-              <p>{message?.comments.length}</p>
+              <p>{comments?.length}</p>
             </div>
             {writeComment && (
               <form
@@ -151,20 +158,17 @@ function GetComment({ params }: { params: { id: string } }) {
                 </div>
               </form>
             )}
-            {(message?.comments ?? []).length <= 0 ? (
+            {(comments ?? []).length <= 0 ? (
               <p className="text-center my-10">No Comment yet</p>
             ) : (
               <div className="grid grid-cols-1 gap-5 mt-2">
-                {message?.comments.slice(0, 6).map((e, i) => (
-                  <div
-                    className="mt-3 border border-white-100 rounded-sm p-4"
+                {comments.slice(0, 6).map((e, i) => (
+                  <SingleComment
                     key={i}
-                  >
-                    <p>
-                      {e.length > 200 ? `${e.substring(0, 200)}...` : e}{" "}
-                      {e.length > 200 && <span>see more</span>}
-                    </p>
-                  </div>
+                    content={comments[0].content}
+                    owner={comments[0].owner}
+                    ellipsis={true}
+                  />
                 ))}
               </div>
             )}

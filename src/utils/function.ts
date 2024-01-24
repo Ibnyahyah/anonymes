@@ -58,3 +58,9 @@ export const checkIfChainIdIsCorrectThenContinue = ({
     console.log(e);
   }
 };
+
+export const ErrorHandler = (errors: ErrorType) => {
+  if (errors.message?.toLowerCase().includes("action cannot be perform")) {
+    alert("NETWORK BUSY, TRY AGAIN");
+  }
+};

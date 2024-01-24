@@ -1,4 +1,5 @@
-import { ANONYAddress, PROFILEAddress } from "@/constants";
+import { AMEsAddress, ANONYAddress, PROFILEAddress } from "@/constants";
+import { AMEs_ABI } from "@/constants/amesAbi";
 import { ANONY_MES_Abi } from "@/constants/anonyAbi";
 import { PROFILE_ABI } from "@/constants/profileAbi";
 import { checkIfChainIdIsCorrectThenContinue } from "@/utils/function";
@@ -19,6 +20,7 @@ export const GlobalAppContextProvider = ({ children }) => {
   const [sideBarOpen, setSideBarOpen] = useState(false);
   const [user, setUser] = React.useState();
   const [message, setMessage] = useState();
+  const [comments, setComments] = useState([]);
   const [balance, setBalance] = useState("0");
 
   const { address, chainId, isConnected } = useWeb3ModalAccount();
@@ -104,6 +106,41 @@ export const GlobalAppContextProvider = ({ children }) => {
       chainId,
       isConnected,
     });
+  const getComments = (id) =>
+    checkIfChainIdIsCorrectThenContinue({
+      cFn: async () => {
+        setComments([]);
+        try {
+          const ethersProvider = new BrowserProvider(walletProvider);
+          const signer = await ethersProvider.getSigner();
+          const AnnoyContract = new Contract(
+            ANONYAddress,
+            ANONY_MES_Abi,
+            signer
+          );
+          const response = await AnnoyContract.getComments(id);
+          // console.log(response);
+          const responseArr = [];
+          for (let i = 0; i < response.length; i++) {
+            const element = response[i];
+            console.log(response[i]);
+            console.log(response[i].msgID);
+            console.log(response[i].content);
+            responseArr.push(element);
+          }
+          setComments(
+            responseArr.sort(
+              (a, b) => Number(b.timestamp) - Number(a.timestamp)
+            )
+          );
+          console.log(response);
+        } catch (err) {
+          throw err;
+        }
+      },
+      chainId,
+      isConnected,
+    });
 
   const getProfile = React.useCallback(
     () =>
@@ -138,12 +175,8 @@ export const GlobalAppContextProvider = ({ children }) => {
           try {
             const ethersProvider = new BrowserProvider(walletProvider);
             const signer = await ethersProvider.getSigner();
-            const AnnoyContract = new Contract(
-              ANONYAddress,
-              ANONY_MES_Abi,
-              signer
-            );
-            const response = await AnnoyContract.getRewardBalance();
+            const AMEsContract = new Contract(AMEsAddress, AMEs_ABI, signer);
+            const response = await AMEsContract.balanceOf(address);
             setBalance(BigInt(response).toString());
           } catch (e) {
             console.log(e.message);
@@ -153,7 +186,7 @@ export const GlobalAppContextProvider = ({ children }) => {
         chainId,
         isConnected,
       }),
-    [chainId, walletProvider, isConnected]
+    [chainId, walletProvider, isConnected, address]
   );
 
   useEffect(() => {
@@ -176,6 +209,8 @@ export const GlobalAppContextProvider = ({ children }) => {
     sideBarOpen,
     setSideBarOpen,
     getMessage,
+    getComments,
+    comments,
     getProfile,
     getRewardBalance,
     user,

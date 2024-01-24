@@ -5,3 +5,11 @@ export type msgType = {
   id: number;
   timestamp: number;
 };
+
+export type commentType = {
+  owner: string;
+  content: string;
+  title: string;
+  msgID: number;
+  timestamp: number;
+};

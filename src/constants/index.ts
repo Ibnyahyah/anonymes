@@ -1,2 +1,3 @@
-export const ANONYAddress = "0x43F833062A1EF536bb0aA00deb1b28BBa2764E3c";
-export const PROFILEAddress = "0x482FF2149E9dE35Ca82C379cA0B1518D8Cae3442";
+export const ANONYAddress = "0x49De60e2Cb2A0d65eEf25372EC8b2FFa5b8ECf58";
+export const PROFILEAddress = "0x8b05cea0cEc92a2067Eaf0FcceE806F4B9825ACD";
+export const AMEsAddress = "0xBe0BA1fF805d5c36FefF54ee323473C48465C7D9";

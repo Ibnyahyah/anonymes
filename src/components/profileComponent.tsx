@@ -44,8 +44,12 @@ function ProfileComponent() {
             formData.fullname,
             formData.bio
           );
-          console.log(response);
-          alert("Profile created, reload the page.");
+          const receipt = await response.wait(2);
+          console.log(receipt);
+          if (receipt.status === 1) {
+            alert("Profile created.");
+            window.location.reload();
+          }
         } catch (e) {
           alert((e as ErrorType).message);
         } finally {
